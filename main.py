@@ -1,18 +1,26 @@
-msc_price = 13_000
-spb_price = 10_000
-ekb_price = 8_000
+PRICES = {"msc": 13_000, "spb": 10_000, "ekb": 8_000}
 
-dist = input("Введите пункт поездки (msc, spb, ekb): ")
-adults = int(input("Введите количество взрослых: "))
-kids = int(input("Введите количество детей: "))
+def read_choice(prompt: str, options: set[str]) -> str:
+    while True:
+        choice = input(prompt).strip().lower()
+        if choice in options:
+            return choice
 
-if dist == "msc":
-    dist_price = msc_price
-elif dist == "spb":
-    dist_price = spb_price
-else:
-    dist_price = ekb_price
+def read_nonneg_int(prompt: str) -> int:
+    while True:
+        try:
+            value = int(input(prompt).strip())
+            if value >= 0:
+                return value
+        except ValueError:
+            pass
 
-total = dist_price * (2 * adults + kids) // 2
+def main() -> None:
+    dist = read_choice("Введите пункт поездки (msc, spb, ekb): ", set(PRICES))
+    adults = read_nonneg_int("Введите количество взрослых: ")
+    kids = read_nonneg_int("Введите количество детей: ")
+    total = PRICES[dist] * (2 * adults + kids) // 2
+    print(f"Цена поездки: {total:,}".replace(",", " "))
 
-print("Цена поездки:", total)
+if __name__ == "__main__":
+    main()
